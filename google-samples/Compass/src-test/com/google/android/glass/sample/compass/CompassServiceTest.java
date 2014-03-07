@@ -60,22 +60,20 @@ public class CompassServiceTest {
 		
 		// Notify sensors have changed.
 		TestSensorManager sensors = (TestSensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-		SensorEvent event = sensors.createSensorEvent(4, Sensor.TYPE_ROTATION_VECTOR);
-		event.accuracy = 1;
-		// Rotation vector component along the x axis (x * sin(O/2)).
-		event.values[0] = 0;
-		// Rotation vector component along the y axis (y * sin(O/2)).
-		event.values[1] = 0;
-		// Rotation vector component along the z axis (z * sin(O/2)).
-		// 1/4 PI = 90 degrees down
-		event.values[2] = (float) Math.PI / 4; 
-		// Scalar component of the rotation vector ((cos(O/2)).
-		event.values[3] = 0;
-		System.out.println("sensors.getListeners() "+sensors+", "+sensors.getListeners());
+		float[] rotation = {
+		    // Rotation vector component along the x axis (x * sin(O/2)), aka Roll
+		    0,
+		    // Rotation vector component along the y axis (y * sin(O/2)), aka Side to side
+		    0, 
+		    // Rotation vector component along the z axis (z * sin(O/2)), aka up and down
+		    // 1/4 PI = 90 degrees down
+		    (float) Math.PI / 4, 
+		    // Scalar component of the rotation vector ((cos(O/2)).
+		    0    
+		};
+		SensorEvent event = sensors.createSensorEvent(rotation, Sensor.TYPE_ROTATION_VECTOR);
 		
-		for (SensorEventListener listener : sensors.getListeners()) {
-			listener.onSensorChanged(event);
-		}
+		sensors.notifySensorChanged(event);
 	}
 
 }

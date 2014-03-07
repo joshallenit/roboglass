@@ -158,4 +158,9 @@ public class CompassService extends Service {
     protected LiveCard getLiveCard() {
       return mLiveCard;
     }
+    
+    /** Hook for unit testing. */
+    protected CompassRenderer getRenderer() {
+      return mRenderer;
+    }
 }

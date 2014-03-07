@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -218,6 +219,7 @@ public class CompassRenderer implements SurfaceHolder.Callback {
 
         if (mTipsContainer.getAnimation() == null) {
             float newAlpha = (show ? 1.0f : 0.0f);
+            if (true) throw new RuntimeException("Changing alpha to "+newAlpha);
             mTipsContainer.animate().alpha(newAlpha).start();
         }
     }
@@ -265,5 +267,10 @@ public class CompassRenderer implements SurfaceHolder.Callback {
                 }
             }
         }
+    }
+    
+    /** Hook for unit testing */
+    protected ViewGroup getLayout() {
+      return mLayout;
     }
 }

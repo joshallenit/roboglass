@@ -33,6 +33,7 @@ public class MenuActivityTest {
 	public void setup() {
 		ShadowWrangler.debug = false;
 		
+		// Save our service when it is created so we can notify listeners that the surface was created.
 		ShadowApplication app = Robolectric.getShadowApplication();
 		app.setServiceInstantiator(new ServiceInstantiator() {
 			@Override
@@ -45,7 +46,9 @@ public class MenuActivityTest {
 			}
 		});
 		
+		// Create our Activity
 		sut = Robolectric.buildActivity(MenuActivity.class).create().start().resume().visible().get();
+		
 		// Create the surface
 		ShadowLiveCard shadowLiveCard = Robolectric.shadowOf_(timerService.getLiveCard());
 		shadowLiveCard.notifySurfaceCreated();
