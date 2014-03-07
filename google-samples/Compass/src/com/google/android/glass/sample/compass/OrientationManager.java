@@ -227,7 +227,6 @@ public class OrientationManager {
 
             // The rotation vector sensor doesn't give us accuracy updates, so we observe the
             // magnetic field sensor solely for those.
-            System.out.println("mSensorManager "+mSensorManager+" adding listener "+mSensorListener);
             mSensorManager.registerListener(mSensorListener,
                     mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
                     SensorManager.SENSOR_DELAY_UI);

@@ -2,6 +2,8 @@ package com.google.android.glass.sample.compass;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.hardware.TestSensorManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +63,12 @@ public class CompassMenuActivityTest {
 
 	  // Look straight ahead
 	  TestSensorManager sensors = (TestSensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-	  float[] rotation = {0, 0, 0, 0};
+	  float[] rotation = {
+	      0.31415987f, 
+	      -0.6283185f, 
+	      -2.8274333f,
+        0    
+    };
     SensorEvent event = sensors.createSensorEvent(rotation, Sensor.TYPE_ROTATION_VECTOR);
     
     sensors.notifySensorChanged(event);
@@ -75,5 +83,34 @@ public class CompassMenuActivityTest {
   public void tooltip_displayed_when_looking_too_far_down() {
     
   }
+	
+	public void displayPitch() {
+	  TestSensorManager sensors = (TestSensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+	  int i = 0;
+	  for (float x = (float) -Math.PI; x <= Math.PI; x += Math.PI/20) {
+	    for (float y = (float) -Math.PI; y <= Math.PI; y += Math.PI/20) {
+	      for (float z = (float) -Math.PI; z <= Math.PI; z += Math.PI/20) {
+	        float[] rotationMatrix = new float[16];
+	        float [] orientation = new float[9];
+	        
+	        float[] rotation = {x, y, z, 0};
+	        SensorEvent event = sensors.createSensorEvent(rotation, Sensor.TYPE_ROTATION_VECTOR);
+	        SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
+          SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_X,
+                  SensorManager.AXIS_Z, rotationMatrix);
+          SensorManager.getOrientation(rotationMatrix, orientation);
+          if (!Float.isNaN(orientation[1])) {
+            System.out.println(Arrays.toString(rotation)
+                +" = azimuth "+Math.toDegrees(orientation[0])
+                +", pitch "+Math.toDegrees(orientation[1])
+                +", roll "+Math.toDegrees(orientation[2]));
+  	      }
+          if (i % 1000 == 0) {
+            System.out.print(".");
+          }
+	      }
+	    }
+	  }
+	}
 
 }

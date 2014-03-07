@@ -5,6 +5,7 @@ import java.util.Map;
 import org.robolectric.bytecode.ShadowConfig;
 import org.robolectric.bytecode.ShadowMap;
 import org.robolectric.bytecode.ShadowMap.Builder;
+import org.robolectric.bytecode.ShadowWrangler;
 
 public class GlassShadowMap extends ShadowMap {
 
@@ -21,10 +22,10 @@ public class GlassShadowMap extends ShadowMap {
 	  };
 	  for (String[] shadowDefault : shadowDefaults) {
 		  String shadowName = getShadowClassName(clazz.getName(), shadowDefault[0], shadowDefault[1]);
-		  System.out.println("Checking shadowName "+shadowName);
+		  if (ShadowWrangler.debug) System.out.println("Checking shadowName "+shadowName);
 		  ShadowConfig config = get(clazz, shadowName);
 		  if (config != null) {
-		    System.out.println("Got config "+config);
+		    if (ShadowWrangler.debug) System.out.println("Got config "+config);
 			  return config;
 		  }
 	  }

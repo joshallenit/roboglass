@@ -219,7 +219,6 @@ public class CompassRenderer implements SurfaceHolder.Callback {
 
         if (mTipsContainer.getAnimation() == null) {
             float newAlpha = (show ? 1.0f : 0.0f);
-            if (true) throw new RuntimeException("Changing alpha to "+newAlpha);
             mTipsContainer.animate().alpha(newAlpha).start();
         }
     }
