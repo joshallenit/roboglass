@@ -3,17 +3,14 @@ package com.google.android.glass.sample.stopwatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricService;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricService;
 import org.robolectric.annotation.Config;
 import org.robolectric.bytecode.ShadowWrangler;
 import org.robolectric.shadows.glass.RoboGlassTestRunner;
-import org.robolectric.shadows.glass.ShadowGlassTypeface;
 import org.robolectric.shadows.glass.ShadowLiveCard;
-import org.robolectric.shadows.glass.ShadowPublishMode;
-import org.robolectric.shadows.glass.ShadowTimelineManager;
 
-@Config(shadows = {ShadowGlassTypeface.class, ShadowPublishMode.class, ShadowTimelineManager.class, ShadowLiveCard.class})
+@Config(emulateSdk = 16)
 @RunWith(RoboGlassTestRunner.class)
 public class StopwatchServiceTest {
 	

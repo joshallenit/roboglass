@@ -28,6 +28,11 @@ public class ShadowLiveCard {
 	}
 	
 	@Implementation
+	public static void __staticInitializer__() {
+    throw new RuntimeException("as");
+  }
+	
+	@Implementation
 	public LiveCard setViews(RemoteViews views) {
 		return realLiveCard;
 	}
@@ -54,6 +59,8 @@ public class ShadowLiveCard {
 		return surfaceView;
 	}
 	
+	
+	
 	/**
 	 * Notify surface holder listeners that the surface has been created.
 	 */
@@ -63,6 +70,34 @@ public class ShadowLiveCard {
 		for (SurfaceHolder.Callback callback : holder.getCallbacks()) {
 			callback.surfaceCreated(holder);
 		}
+	}
+	
+	@Implements(LiveCard.PublishMode.class)
+	public static class ShadowPublishMode {
+	  
+	  public static final ShadowPublishMode REVEAL = new ShadowPublishMode();
+	  public static final ShadowPublishMode SILENT = new ShadowPublishMode();
+	  
+	  @Implementation
+	  public static ShadowPublishMode[] values() {
+	    return new ShadowPublishMode[] {REVEAL, SILENT};
+	  }
+	  
+	  @Implementation
+	  public static ShadowPublishMode valueOf(String name) {
+	    if ("REVEAL".equals(name)) {
+	      return REVEAL;
+	    }
+	    if ("SILENT".equals(name)) {
+	      return SILENT;
+	    } 
+	    throw new IllegalArgumentException("Unknown PublishMode "+name);
+	  }
+	  
+	  @Implementation
+	  public void __constructor__() {
+	  }
+
 	}
 	
 }

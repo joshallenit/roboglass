@@ -1,34 +1,28 @@
 package com.google.android.glass.sample.timer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RoblectricService;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;
 import org.robolectric.bytecode.ShadowWrangler;
 import org.robolectric.shadows.ServiceInstantiator;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.glass.RoboGlassTestRunner;
-import org.robolectric.shadows.glass.ShadowGlassTypeface;
 import org.robolectric.shadows.glass.ShadowLiveCard;
-import org.robolectric.shadows.glass.ShadowPublishMode;
-import org.robolectric.shadows.glass.ShadowTimelineManager;
 import org.robolectric.tester.android.view.TestMenuItem;
 
 import android.app.Service;
 import android.content.Intent;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
  * The way Timer works is that it keeps recursively calling handler.post(listener, DELAY_MILLIS), and updates the text
  * view every time. 
  */
-@Config(shadows = {ShadowGlassTypeface.class, ShadowPublishMode.class, ShadowTimelineManager.class, ShadowLiveCard.class}, 
-		emulateSdk = 16)
+@Config(emulateSdk = 16)
 @RunWith(RoboGlassTestRunner.class)
 public class MenuActivityTest {
 	

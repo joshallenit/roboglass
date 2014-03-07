@@ -6,6 +6,7 @@ import org.robolectric.SdkConfig;
 import org.robolectric.bytecode.ClassHandler;
 import org.robolectric.bytecode.ClassInfo;
 import org.robolectric.bytecode.Setup;
+import org.robolectric.bytecode.ShadowConfig;
 import org.robolectric.bytecode.ShadowMap;
 import org.robolectric.bytecode.ShadowWrangler;
 import org.robolectric.internal.DoNotInstrument;
@@ -15,50 +16,42 @@ import com.google.android.glass.touchpad.Gesture;
 import com.xtremelabs.utilities.Logger;
 
 public class RoboGlassTestRunner extends RobolectricTestRunner {
-	
-	public RoboGlassTestRunner(Class<?> testClass) throws InitializationError {
-		super(testClass);
-		Logger.d("two");
-		System.out.println("two");
-	}
-	
-	@Override
-	public Setup createSetup() {
-	    return new Setup() {
-	    	@Override
-	    	public boolean containsStubs(ClassInfo classInfo) {
-	    		boolean val = super.containsStubs(classInfo) || isStubbedGdk(classInfo.getName());
-//	    		System.out.println("containsStubs "+classInfo.getName()+" = "+val);
-	    		return val;
-	    	}
-	    	
-	    	@Override
-	    	public boolean isFromAndroidSdk(ClassInfo classInfo) {
-	    	    boolean val = super.isFromAndroidSdk(classInfo) || isStubbedGdk(classInfo.getName());
-//	    	    System.out.println("isFromAndroidSdk "+classInfo.getName()+" = "+val);
-	    	    return val;
-	    	}
 
-	    	@Override
-	    	public boolean shouldAcquire(String name) {
-	    	    boolean val = super.shouldAcquire(name);
-//	    	    System.out.println("shouldAcquire "+name+" = "+val);
-	    	    return val;
-	    	}
-	    	
-	    	@Override
-	    	public boolean shouldInstrument(ClassInfo classInfo) {
-	    		boolean val = super.shouldInstrument(classInfo);
-//	    		System.out.println("shouldInstrument "+classInfo.getName()+" = "+val);
-	    		return val;
-	    	}
-	    	
-	    	public boolean isStubbedGdk(String className) {
-	    		return className.startsWith("com.google.android.glass.")
-					&& !className.startsWith("com.google.android.glass.sample")
-					&& !className.equals(com.google.android.glass.touchpad.Gesture.class.getName());
-	    	}
-	    };
-	}
+  private static ShadowMap mainShadowMap;
+
+  public RoboGlassTestRunner(Class<?> testClass) throws InitializationError {
+    super(testClass);
+  }
+
+  @Override
+  public Setup createSetup() {
+    return new Setup() {
+      @Override
+      public boolean containsStubs(ClassInfo classInfo) {
+        return super.containsStubs(classInfo) || isStubbedGdk(classInfo.getName());
+      }
+
+      @Override
+      public boolean isFromAndroidSdk(ClassInfo classInfo) {
+        return super.isFromAndroidSdk(classInfo) || isStubbedGdk(classInfo.getName());
+      }
+
+      public boolean isStubbedGdk(String className) {
+        return className.startsWith("com.google.android.glass.")
+            && !className.startsWith("com.google.android.glass.sample")
+            && !className.equals(com.google.android.glass.touchpad.Gesture.class.getName());
+      }
+    };
+  }
+
+  @Override
+  protected ShadowMap createShadowMap() {
+    synchronized (RoboGlassTestRunner.class) {
+      if (mainShadowMap == null) {
+        mainShadowMap = new GlassShadowMap.Builder().build();
+      }
+      return mainShadowMap;
+    }
+  }
 
 }
