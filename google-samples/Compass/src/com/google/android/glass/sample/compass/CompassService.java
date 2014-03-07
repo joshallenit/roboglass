@@ -153,4 +153,9 @@ public class CompassService extends Service {
 
         super.onDestroy();
     }
+    
+    /** Hook for unit testing. */
+    protected LiveCard getLiveCard() {
+      return mLiveCard;
+    }
 }

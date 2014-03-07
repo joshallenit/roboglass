@@ -32,6 +32,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -132,6 +133,15 @@ public class OrientationManager {
                 // Store the pitch (used to display a message indicating that the user's head
                 // angle is too steep to produce reliable results.
                 mPitch = (float) Math.toDegrees(mOrientation[1]);
+                /*
+                 * values[0]: azimuth, rotation around the Z axis.
+                   values[1]: pitch, rotation around the X axis.
+                   values[2]: roll, rotation around the Y axis.
+                 */
+                System.out.println("pitch "+mPitch+", "
+                    + "\n orientation "+Arrays.toString(mOrientation) 
+                    + "\n vector "+Arrays.toString(event.values)
+                    + "\n rotation "+Arrays.toString(mRotationMatrix));
 
                 // Convert the heading (which is relative to magnetic north) to one that is
                 // relative to true north, using the user's current location to compute this.
@@ -217,6 +227,7 @@ public class OrientationManager {
 
             // The rotation vector sensor doesn't give us accuracy updates, so we observe the
             // magnetic field sensor solely for those.
+            System.out.println("mSensorManager "+mSensorManager+" adding listener "+mSensorListener);
             mSensorManager.registerListener(mSensorListener,
                     mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
                     SensorManager.SENSOR_DELAY_UI);

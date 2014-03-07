@@ -3,7 +3,7 @@ package com.google.android.glass.sample.stopwatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RoblectricService;
+import org.robolectric.RobolectricService;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;
 import org.robolectric.bytecode.ShadowWrangler;
@@ -25,7 +25,7 @@ public class StopwatchServiceTest {
 		
 		// Create and start the service
 		sut = new StopwatchService();
-		new RoblectricService<StopwatchService>(sut).create().start();
+		new RobolectricService<StopwatchService>(sut).create().start();
 		
 		// Create the surface
 		ShadowLiveCard shadowLiveCard = Robolectric.shadowOf_(sut.getLiveCard());

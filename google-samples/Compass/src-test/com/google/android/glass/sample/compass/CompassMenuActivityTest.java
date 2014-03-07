@@ -1,19 +1,14 @@
 package com.google.android.glass.sample.compass;
 
-import static org.junit.Assert.*;
-
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.glass.ShadowGlassTypeface;
-import org.robolectric.shadows.glass.ShadowPublishMode;
+import org.robolectric.shadows.glass.RoboGlassTestRunner;
 
 @Config(emulateSdk=16)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RoboGlassTestRunner.class)
 public class CompassMenuActivityTest {
 	
 	CompassMenuActivity sut; 
