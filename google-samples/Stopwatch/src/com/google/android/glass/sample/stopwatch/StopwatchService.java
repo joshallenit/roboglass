@@ -86,9 +86,7 @@ public class StopwatchService extends Service {
         super.onDestroy();
     }
     
-    /**
-     * Hook for unit testing.
-     */
+    /** Hook for unit testing. */
     protected LiveCard getLiveCard() {
     	return mLiveCard;
     }

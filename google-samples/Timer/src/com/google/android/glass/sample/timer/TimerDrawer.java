@@ -83,4 +83,9 @@ public class TimerDrawer implements SurfaceHolder.Callback {
             mHolder.unlockCanvasAndPost(canvas);
         }
     }
+    
+    /** Hook for unit testing. */
+    protected TimerView getView() {
+    	return mView;
+    }
 }

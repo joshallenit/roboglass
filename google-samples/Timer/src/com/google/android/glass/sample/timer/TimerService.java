@@ -16,17 +16,15 @@
 
 package com.google.android.glass.sample.timer;
 
-import com.google.android.glass.timeline.LiveCard;
-import com.google.android.glass.timeline.LiveCard.PublishMode;
-import com.google.android.glass.timeline.TimelineManager;
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.util.Log;
+
+import com.google.android.glass.timeline.LiveCard;
+import com.google.android.glass.timeline.LiveCard.PublishMode;
+import com.google.android.glass.timeline.TimelineManager;
 
 /**
  * Service owning the LiveCard living in the timeline.
@@ -91,5 +89,15 @@ public class TimerService extends Service {
             mTimerDrawer.getTimer().reset();
         }
         super.onDestroy();
+    }
+    
+    /** Hook for unit testing. */
+    protected LiveCard getLiveCard() {
+    	return mLiveCard;
+    }
+    
+    /** Hook for unit testing. */
+    protected TimerDrawer getTimerDrawer() {
+    	return mTimerDrawer;
     }
 }
