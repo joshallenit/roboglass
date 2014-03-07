@@ -1,7 +1,6 @@
 package com.google.android.glass.sample.compass;
 
 import static org.junit.Assert.assertEquals;
-import static org.robolectric.Robolectric.shadowOf;
 
 import java.util.Date;
 
@@ -10,15 +9,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContextImpl;
-import org.robolectric.shadows.ShadowSensorManager;
 import org.robolectric.shadows.ShadowSurfaceView;
 import org.robolectric.shadows.ShadowSurfaceView.FakeSurfaceHolder;
+import org.robolectric.shadows.glass.RoboGlassTestRunner;
 import org.robolectric.shadows.glass.ShadowGlassTypeface;
 import org.robolectric.shadows.glass.ShadowPublishMode;
-import org.robolectric.shadows.glass.ShadowTimelineManager;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -28,8 +24,7 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.hardware.RoboGlassSensorManager;
+import android.hardware.TestSensorManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.RemoteViews;
@@ -40,9 +35,7 @@ import com.google.android.glass.timeline.TimelineManager;
 import com.pivotallabs.logging.SystemOutLogger;
 import com.xtremelabs.utilities.Logger;
 
-import org.robolectric.shadows.glass.*; 
-
-@Config(shadows = {ShadowGlassTypeface.class, ShadowPublishMode.class})
+@Config(shadows = {ShadowGlassTypeface.class, ShadowPublishMode.class}, emulateSdk=16)
 @RunWith(RoboGlassTestRunner.class)
 public class CompassServiceTest {
 	
@@ -55,12 +48,6 @@ public class CompassServiceTest {
 	Context context = Robolectric.getShadowApplication().getApplicationContext();
 	private SurfaceView surfaceView;
 	
-	@Before
-	public void setup_services() {
-		//((ShadowContextImpl) shadowOf(context)).setSystemService(Context.SENSOR_SERVICE, service);
-		Robolectric.getShadowApplication().setSystemService(Context.SENSOR_SERVICE, new RoboGlassSensorManager());
-	}
-
 	@Before
 	public void setup() throws Exception {
 		setupLogger();
@@ -130,16 +117,12 @@ public class CompassServiceTest {
 		}
 		
 		// Notify sensors have changed.
-		RoboGlassSensorManager sensors = (RoboGlassSensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-		SensorEvent event = sensors.createSensorEvent(10);
-		Sensor sensor = Mockito.mock(Sensor.class);
-		Mockito.when(sensor.getType()).thenReturn(Sensor.TYPE_ROTATION_VECTOR);
-		event.sensor = sensor;
+		TestSensorManager sensors = (TestSensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+		SensorEvent event = sensors.createSensorEvent(10, Sensor.TYPE_ROTATION_VECTOR);
 		event.accuracy = 100;
 		event.values[0] = 2;
 		event.values[1] = 4;
 		event.values[2] = 8;
-		event.timestamp = new Date().getTime();
 		for (SensorEventListener listener : sensors.getListeners()) {
 			listener.onSensorChanged(event);
 		}

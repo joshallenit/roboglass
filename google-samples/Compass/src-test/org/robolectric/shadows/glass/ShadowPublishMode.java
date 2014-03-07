@@ -6,6 +6,9 @@ import org.robolectric.internal.Instrument;
 
 import com.google.android.glass.timeline.LiveCard;
 
+/**
+ * 
+ */
 @Implements(LiveCard.PublishMode.class)
 public class ShadowPublishMode {
 	
